@@ -78,7 +78,7 @@ def main(model_folder: Path, data_path: Path | None = None, headless: bool = Tru
         "move-ego-low0.5-0-0",
 
         # locomotion medium
-        "move-ego-0-0.7",
+        # "move-ego-0-0.7",
         # "move-ego-90-0.7",
         # "move-ego-180-0.7",
         # "move-ego--90-0.7",
@@ -87,9 +87,9 @@ def main(model_folder: Path, data_path: Path | None = None, headless: bool = Tru
 
         # locomotion slow
         "move-ego-0-0.3",
-        "move-ego-90-0.3",
-        "move-ego-180-0.3",
-        "move-ego--90-0.3",
+        # "move-ego-90-0.3",
+        # "move-ego-180-0.3",
+        # "move-ego--90-0.3",
         
         # locomotion fast
         # "move-ego-0-1",
@@ -99,46 +99,46 @@ def main(model_folder: Path, data_path: Path | None = None, headless: bool = Tru
 
         # spin
         "rotate-z-5-0.5",
-        "rotate-z--5-0.5",
+        # "rotate-z--5-0.5",
     
         # raise arms
         "raisearms-l-l",
-        "raisearms-l-m",
-        "raisearms-m-l",
-        "raisearms-m-m",
+        # "raisearms-l-m",
+        # "raisearms-m-l",
+        # "raisearms-m-m",
 
 
         # move + arms
         "move-arms-0-0.7-m-m",
-        "move-arms-90-0.7-m-m",
-        "move-arms-180-0.4-m-m",
-        "move-arms--90-0.7-m-m",
-        "move-arms-0-0.7-l-m",
-        "move-arms-90-0.7-l-m",
-        "move-arms-180-0.4-l-m",
-        "move-arms--90-0.7-l-m",
-        "move-arms-0-0.7-m-l",
-        "move-arms-90-0.7-m-l",
-        "move-arms-180-0.4-m-l",
-        "move-arms--90-0.7-m-l",
-        "move-arms-0-0.7-l-l",
-        "move-arms-90-0.7-l-l",
-        "move-arms-180-0.4-l-l",
-        "move-arms--90-0.7-l-l",
+        # "move-arms-90-0.7-m-m",
+        # "move-arms-180-0.4-m-m",
+        # "move-arms--90-0.7-m-m",
+        # "move-arms-0-0.7-l-m",
+        # "move-arms-90-0.7-l-m",
+        # "move-arms-180-0.4-l-m",
+        # "move-arms--90-0.7-l-m",
+        # "move-arms-0-0.7-m-l",
+        # "move-arms-90-0.7-m-l",
+        # "move-arms-180-0.4-m-l",
+        # "move-arms--90-0.7-m-l",
+        # "move-arms-0-0.7-l-l",
+        # "move-arms-90-0.7-l-l",
+        # "move-arms-180-0.4-l-l",
+        # "move-arms--90-0.7-l-l",
 
-        # spin + arms
-        "spin-arms-5-l-l",
-        "spin-arms--5-l-l",
-        "spin-arms-5-l-m",
-        "spin-arms--5-l-m",
-        # "spin-arms-5-m-m",
-        # "spin-arms--5-m-m",
-        "spin-arms-5-m-l",
-        "spin-arms--5-m-l",
+        # # spin + arms
+        # "spin-arms-5-l-l",
+        # "spin-arms--5-l-l",
+        # "spin-arms-5-l-m",
+        # "spin-arms--5-l-m",
+        # # "spin-arms-5-m-m",
+        # # "spin-arms--5-m-m",
+        # "spin-arms-5-m-l",
+        # "spin-arms--5-m-l",
 
-        # sit
-        "crouch-0",
-        "crouch-0.25",
+        # # sit
+        # "crouch-0",
+        # "crouch-0.25",
         "sitonground",
     ]
 
