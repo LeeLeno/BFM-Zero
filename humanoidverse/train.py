@@ -158,6 +158,7 @@ class TrainConfig(BaseConfig):
                     )
                 log_names.add(eval_cfg.name_in_logs)
 
+    @infra.apply
     def build(self):
         """In case of cluster run, use exca and process instead of explivit build"""
         return Workspace(self)
@@ -692,7 +693,7 @@ def train_bfm_zero():
         work_dir='results/bfmzero-isaac',
         seed=4728,
         online_parallel_envs=1024,
-        log_every_updates=384000,
+        log_every_updates=10240,
         num_env_steps=384000000,
         update_agent_every=1024,
         num_seed_steps=10240,
@@ -705,16 +706,16 @@ def train_bfm_zero():
         prioritization_scale=2.0,
         prioritization_mode='exp',
         use_trajectory_buffer=True,
-        buffer_size=5120000,
-        use_wandb=False,
-        wandb_ename='yitangl',  # your wandb entity (username/team), empty = default from wandb login
+        buffer_size=2500000,
+        use_wandb=True,
+        wandb_ename=None,  # None = 用你 `wandb login` 的默认 entity（原作者的 'yitangl' 你无权限）
         wandb_gname='bfmzero-isaac',  # run group
         wandb_pname='bfmzero-isaac',  # your wandb project name
         load_isaac_expert_data=True,
-        buffer_device='cuda',
+        buffer_device='cuda:1',  # 回放池(2.5M~12GB)放第二张 5090；GPU0 只放模型+仿真+CUDA Graphs池，否则爆显存
         disable_tqdm=True,
         evaluations=[HumanoidVerseIsaacTrackingEvaluationConfig(name='HumanoidVerseIsaacTrackingEvaluationConfig', generate_videos=False, videos_dir='videos', video_name_prefix='unknown_agent', name_in_logs='humanoidverse_tracking_eval', env=None, num_envs=1024, n_episodes_per_motion=1)],
-        eval_every_steps=9600000,
+        eval_every_steps=500000,
         tags={},
     )
     workspace = cfg.build()

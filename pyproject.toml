@@ -7,23 +7,24 @@ name = "motivo-isaac"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
-requires-python = "==3.10.*"
+requires-python = "==3.11.*"
 dependencies = [
     "easydict>=1.13",
-    "exca>=0.2.5",
+    "exca==0.4.5",  # 0.5.x changed @infra.apply semantics -> "Infra not applied to a method"
     "hf-xet>=1.1.2",
     "huggingface-hub>=0.30.2",
     "humenv",
     "hydra-core>=1.2.0",
-    "isaaclab[all,isaacsim]==2.0.2; sys_platform == 'linux'",
-    "isaacsim[all,extscache]==4.5.0; sys_platform == 'linux'",
+    "isaaclab[all,isaacsim]==2.3.0; sys_platform == 'linux'",
+    "isaacsim[all,extscache]==5.1.0; sys_platform == 'linux'",
     "joblib>=1.4.2",
     "loguru>=0.7.3",
     "lxml>=5.3.2",
     "mediapy>=1.2.3",
     "ml-collections>=1.1.0",
-    "mujoco>=3.3.1",
+    "mujoco==3.5.0",
     "notebook>=7.4.2",
+    "numpy==1.26.0",
     "numpy-stl>=3.2.0",
     "onnx>=1.16.1",
     "onnxruntime>=1.22.0",
@@ -34,13 +35,27 @@ dependencies = [
     "safetensors>=0.5.3",
     "tensordict>=0.8.3",
     "termcolor>=3.0.1",
-    "torch>=2.5.0",
-    "tyro>=0.9.18",
+    "torch==2.7.0+cu128; sys_platform == 'linux'",
+    "torchaudio==2.7.0+cu128; sys_platform == 'linux'",
+    "torchvision==0.22.0+cu128; sys_platform == 'linux'",
+    "tyro",  # unpinned: isaacsim 5.1 caps tyro <0.9.18; repo only uses tyro.cli()
+    "wandb",
     "xxhash>=3.5.0",
 ]
 
 [[tool.uv.index]]
+url = "https://pypi.tuna.tsinghua.edu.cn/simple"
+
+[[tool.uv.index]]
 url = "https://pypi.nvidia.com/"
+
+# RTX 5090 (Blackwell / sm_120) needs the CUDA 12.8 PyTorch wheels.
+# explicit=true keeps this index out of the candidate set for every package
+# except the torch trio pinned in [tool.uv.sources] below.
+[[tool.uv.index]]
+name = "pytorch-cu128"
+url = "https://download.pytorch.org/whl/cu128"
+explicit = true
 
 # [project.optional-dependencies]
 # sim2real = [
@@ -53,6 +68,17 @@ url = "https://pypi.nvidia.com/"
 [tool.uv.sources]
 # unitree-sdk2py = { path = "unitree_sdk2_python", editable = true }
 humenv = { git = "https://github.com/facebookresearch/humenv.git" }
+# Pin the torch trio to the cu128 index only (never the tuna/nvidia mirrors),
+# so the +cu128 Blackwell wheels resolve unambiguously under unsafe-best-match.
+torch = [{ index = "pytorch-cu128" }]
+torchvision = [{ index = "pytorch-cu128" }]
+torchaudio = [{ index = "pytorch-cu128" }]
+
+# isaaclab 2.3.0 pulls flatdict==4.0.1 (setup.cfg-only, no pyproject). Its
+# legacy build imports pkg_resources, which modern setuptools (>=81) no longer
+# exposes -> build fails. Force an older setuptools that still ships it.
+[tool.uv.extra-build-dependencies]
+flatdict = ["setuptools<81"]
 
 [tool.setuptools]
 include-package-data = true
@@ -68,6 +94,9 @@ dev-dependencies = [
     "ruff==0.9.6",
 ]
 index-strategy = "unsafe-best-match"
+# isaacsim-core 5.1.0.0 declares a pywin32 dep with NO platform marker, so uv
+# tries to install the Windows-only pywin32 on Linux and fails. Re-gate it.
+override-dependencies = ["pywin32; sys_platform == 'win32'"]
 
 [tool.ruff]
 line-length = 140
