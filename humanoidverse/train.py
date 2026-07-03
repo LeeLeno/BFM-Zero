@@ -4,6 +4,19 @@
 # LICENSE file in the root directory of this source tree.
 
 import os
+import sys
+
+# Force Python UTF-8 Mode so that subprocess text decoding (e.g. numpy's
+# check_support_sve inside isaacsim's bundled numpy) does not crash with an
+# ascii UnicodeDecodeError when the process is launched under a non-UTF-8
+# locale (isaacsim can reset the locale to C/POSIX). PYTHONUTF8 must be set
+# before the interpreter starts, so we re-exec the process once if needed.
+if not sys.flags.utf8_mode and os.environ.get("PYTHONUTF8") != "1":
+    os.environ["PYTHONUTF8"] = "1"
+    if __spec__ is not None:  # launched via `python -m humanoidverse.train`
+        os.execv(sys.executable, [sys.executable, "-m", __spec__.name, *sys.argv[1:]])
+    else:  # launched as `python humanoidverse/train.py`
+        os.execv(sys.executable, [sys.executable, *sys.argv])
 
 from humanoidverse.agents.evaluations.humanoidverse_isaac import (
     HumanoidVerseIsaacTrackingEvaluation,
@@ -692,7 +705,7 @@ def train_bfm_zero():
         work_dir='results/bfmzero-isaac',
         seed=4728,
         online_parallel_envs=1024,
-        log_every_updates=384000,
+        log_every_updates=10240,
         num_env_steps=384000000,
         update_agent_every=1024,
         num_seed_steps=10240,
@@ -705,16 +718,16 @@ def train_bfm_zero():
         prioritization_scale=2.0,
         prioritization_mode='exp',
         use_trajectory_buffer=True,
-        buffer_size=5120000,
-        use_wandb=False,
-        wandb_ename='yitangl',  # your wandb entity (username/team), empty = default from wandb login
+        buffer_size=2500000,
+        use_wandb=True,
+        wandb_ename=None,  # None = 用你 `wandb login` 的默认 entity（原作者的 'yitangl' 你无权限）
         wandb_gname='bfmzero-isaac',  # run group
         wandb_pname='bfmzero-isaac',  # your wandb project name
         load_isaac_expert_data=True,
         buffer_device='cuda',
         disable_tqdm=True,
         evaluations=[HumanoidVerseIsaacTrackingEvaluationConfig(name='HumanoidVerseIsaacTrackingEvaluationConfig', generate_videos=False, videos_dir='videos', video_name_prefix='unknown_agent', name_in_logs='humanoidverse_tracking_eval', env=None, num_envs=1024, n_episodes_per_motion=1)],
-        eval_every_steps=9600000,
+        eval_every_steps=500000,
         tags={},
     )
     workspace = cfg.build()

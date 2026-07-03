@@ -209,6 +209,11 @@ class DictBuffer:
             loaded_config = json.load(f)
         if "__target__" in loaded_config:
             del loaded_config["__target__"]
+        if device is not None:
+            # Honor the requested device; otherwise the buffer is placed on whatever
+            # device was saved in config.json (e.g. cuda:1 from training), which fails
+            # with "invalid device ordinal" under CUDA_VISIBLE_DEVICES limiting GPUs.
+            loaded_config["device"] = device
         # Old buffers might not have these values
         _idx = None
         _is_full = None

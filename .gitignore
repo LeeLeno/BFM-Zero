@@ -1,0 +1,23 @@
+# ===== Python / uv 虚拟环境 (20GB, 绝不入库; 靠 uv.lock 复现) =====
+.venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+
+# ===== HuggingFace / 数据缓存 =====
+hf_tmp/
+*.pkl
+
+# ===== 训练产物 / 日志 =====
+results/
+_wandb/
+wandb/
+model/
+checkpoint/
+isaac_videos/
+videos/
+outputs/
+*.log
+
+# ===== 本机 IDE / 工具设置 =====
+.claude/settings.local.json

@@ -68,6 +68,11 @@ dev-dependencies = [
     "ruff==0.9.6",
 ]
 index-strategy = "unsafe-best-match"
+# rl-games (拉自 isaaclab) 硬 pin wandb<0.13，但老版 wandb 不认新格式 API key。
+# rl-games 在本项目未使用，强制覆盖到新版 wandb。
+override-dependencies = [
+    "wandb>=0.18",
+]
 
 [tool.ruff]
 line-length = 140
